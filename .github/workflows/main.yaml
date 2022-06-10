@@ -10,9 +10,7 @@ on:
 jobs:
   static-analysis:
     name: Static Analysis
-
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v3
       - name: Set up Ruby
@@ -22,4 +20,8 @@ jobs:
       - name: Install dependencies
         run: bundle install
       - name: Lint
-        run: bundle exec rubocop --format github
+        run: bundle exec rubocop --format github --format json --out reports/rubocop.json
+      - uses: actions/upload-artifact@v3
+        with:
+          name: reports
+          path: reports
