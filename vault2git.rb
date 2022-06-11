@@ -1,7 +1,8 @@
-require 'rubygems'
-require 'bundler'
+require "rubygems"
+require "bundler"
+require "./options"
+require "./converter"
 
-require 'options'
-require 'converter'
-
-Converter.convert
+options = Options.new
+converter = Converter.new(options.options)
+converter.convert
