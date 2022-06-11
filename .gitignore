@@ -1,3 +1,6 @@
+# Uneeded log files.
+From-ATS/**/*
+
 # Generated log files.
 *.log
 
