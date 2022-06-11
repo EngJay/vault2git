@@ -1,0 +1,19 @@
+inherit_gem:
+  rubocop-github:
+    - config/default_edge.yml
+
+AllCops:
+  Exclude:
+    - 'From-ATS/**/*'
+
+# CLI application, so not necessary.
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+# TODO Reenable once the seemingly incomprehensible issue with lin 44 of converter.rb is resolved.
+Style/OptionalBooleanParameter:
+  Enabled: false
+
+# Temporarily disabled pending implementation of tests.
+Style/TernaryParentheses:
+  Enabled: false
