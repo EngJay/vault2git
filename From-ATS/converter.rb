@@ -3,8 +3,10 @@ require "fileutils"
 require "time"
 require "log4r"
 require "pp"
+require "date"
+require "json"
 
-GITIGNORE = <<~IGNORED.freeze
+GITIGNORE = <<~EOF
   [Oo]bj/
   [Bb]in/
   *.suo
@@ -13,47 +15,39 @@ GITIGNORE = <<~IGNORED.freeze
   *.vssscc
   *.tmp
   *.log
-IGNORED
+EOF
 
-# Converts a SourceGear Vault project directory to a Git repository.
 class Converter
-  # Configure logging.
+  # Configure logging
   include Log4r
-
-  def initialize(options)
-    @options = options
-
-    @stdout_log = StdoutOutputter.new("console")
-    @stdout_log.level = INFO
-
-    @file_log = FileOutputter.new("file", filename: @options.logfile, trunc: true)
-    @file_log.level = DEBUG
-
-    @logger = Logger.new("vault2git")
-    @logger.add(@stdout_log, @file_log)
-    %w[debug info warn error fatal].map(&:to_sym).each do |level|
-      (class << self; self; end).instance_eval do
-        define_method level do |msg|
-          @logger.send level, msg
-        end
+  $logger = Logger.new("vault2git")
+  stdout_log = StdoutOutputter.new("console")
+  stdout_log.level = INFO
+  file_log = FileOutputter.new("file", filename: $options.logfile, trunc: true)
+  file_log.level = DEBUG
+  $logger.add(stdout_log, file_log)
+  %w[debug info warn error fatal].map(&:to_sym).each do |level|
+    (class << self; self; end).instance_eval do
+      define_method level do |msg|
+        $logger.send level, msg
       end
     end
-
-    p options
   end
 
-  def quote_param(param)
-    value = @options.send(param)
+  debug $options.inspect
+
+  def self.quote_param(param)
+    value = $options.send(param)
     quote_value value
   end
 
-  def quote_value(value)
+  def self.quote_value(value)
     return "" unless value
 
-    value.include?(" ") ? "\"#{value}\"" : value
+    value.include?(" ") ? '"' + value + '"' : value
   end
 
-  def vault_command(command, options = [], args = [], append_source_folder = true)
+  def self.vault_command(command, options = [], args = [], append_source_folder = true)
     parts = []
     parts << quote_param(:vault_client)
     parts << command
@@ -71,12 +65,12 @@ class Converter
       raise "Unsuccessful command '#{command}': #{(doc % :error).text}" if (doc % :result)[:success] == "no"
 
       doc
-    rescue StandardError => e
-      raise "Error processing command '#{cmd}'", e
+    rescue Exception => e
+      raise # "Error processing command '#{cmd}'", e
     end
   end
 
-  def git_command(command, *options)
+  def self.git_command(command, *options)
     parts = []
     parts << quote_param(:git)
     parts << command
@@ -84,19 +78,19 @@ class Converter
     cmd = parts.join(" ")
     debug "Invoking git: #{cmd}"
     begin
-      debug(retryable { `#{cmd}` })
-    rescue StandardError => e
+      debug output = retryable { `#{cmd}` }
+    rescue Exception => e
       raise "Error processing command '#{command}'", e
     end
   end
 
-  def git_commit(comments, *options)
+  def self.git_commit(comments, *options)
     git_command "add", "--all", "."
     params = [*comments].map { |c| "-m \"#{c}\"" } << options << "-a"
     git_command "commit", *params.flatten
   end
 
-  def retryable(max_times = 5, &block)
+  def self.retryable(max_times = 5, &block)
     tries = 0
     begin
       yield block
@@ -111,25 +105,25 @@ class Converter
     end
   end
 
-  def clear_working_folder
-    files_to_delete = Dir["#{@options.dest}/*"]
+  def self.clear_working_folder
+    files_to_delete = Dir[$options.dest + "/*"]
     debug "Removing folders: #{files_to_delete.join(', ')}"
     files_to_delete.each { |d| FileUtils.rm_rf d }
   end
 
-  def convert
+  def self.convert
     info "Starting at #{Time.now}"
-    debug "Parameters: #{@options.inspect}"
-    authors = parsed_authors
+    debug "Parameters: " + $options.inspect
+    authors = get_authors
     info "Prepare destination folder"
-    FileUtils.rm_rf @options.dest
-    git_command "init", quote_value(@options.dest)
-    Dir.chdir @options.dest
+    FileUtils.rm_rf $options.dest
+    git_command "init", quote_value($options.dest)
+    Dir.chdir $options.dest
     File.open(".gitignore", "w") { |f| f.write(GITIGNORE) }
     git_commit "Starting Vault repository import"
 
     info "Set Vault working folder"
-    vault_command "setworkingfolder", quote_value(@options.source), @options.dest, false
+    vault_command "setworkingfolder", quote_value($options.source), $options.dest, false
 
     info "Fetch version history"
     versions = vault_command("versionhistory", ["-rowlimit 0"]) % :history
@@ -147,31 +141,29 @@ class Converter
       info "Processing version #{count} of #{versions.size}"
       clear_working_folder
       vault_command "getversion",
-                    ["-backup no", "-merge overwrite", "-setfiletime checkin", "-performdeletions removeworkingcopy", version[:version]], @options.dest
+                    ["-backup no", "-merge overwrite", "-setfiletime checkin", "-performdeletions removeworkingcopy", version[:version]], $options.dest
       comments = [version[:comment],
                   "Original Vault commit: version #{version[:version]} on #{version[:date]} by #{version[:user]} (txid=#{version[:txid]})"].compact.map do |c|
         c.gsub('"', '\"')
       end
       git_commit comments,
-                 "--date=\"#{Time.zone.parse(version[:date]).strftime('%Y-%m-%dT%H:%M:%S')}\"",
-                 ((authors.key? version[:user]) ? "--author=\"#{authors[version[:user]]}\"" : "")
-      git_command "gc" if (count % 20).zero? || count == versions.size
-      GC.start if (count % 20).zero? # Force Ruby GC (might speed things up?)
+                 "--date=\"#{Time.strptime(version[:date], '%m/%d/%Y %l:%M:%S %p').strftime('%Y-%m-%dT%H:%M:%S')}\"", (authors.key?(version[:user]) ? "--author=\"#{authors[version[:user]]['name']} <#{authors[version[:user]]['email']}>\"" : "")
+      git_command "gc" if count % 20 == 0 || count == versions.size
+      GC.start if count % 20 == 0 # Force Ruby GC (might speed things up?)
     end
 
     info "Ended at #{Time.now}"
   end
 
-  AUTHORS_FILE = "authors.xml".freeze
-  def parsed_authors
+  AUTHORS_FILE = "./authors.json"
+  def self.get_authors
     authors = {}
 
     if File.exist? AUTHORS_FILE
       info "Reading authors file"
-      doc = Nokogiri::XML(File.open(AUTHORS_FILE))
-      doc.children.each do |item|
-        authors[item[:vaultname]] = "#{item[:name]} <#{item[:email]}>"
-      end
+      authors_file = open(AUTHORS_FILE)
+      authors_json = authors_file.read
+      authors = JSON.parse(authors_json)
     end
 
     authors
