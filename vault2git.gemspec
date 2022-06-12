@@ -8,12 +8,10 @@ Gem::Specification.new do |spec|
   spec.authors = ["Jason Scott"]
   spec.email = [""]
 
-  spec.summary = "SourcGear Vault to Git converter."
+  spec.summary = "SourcGear Vault project to Git repo converter."
   spec.homepage = "https://github.com/EngJay/vault2git"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 3.1"
-
-  spec.metadata["allowed_push_host"] = "TODO: Set to your gem server 'https://example.com'"
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/EngJay/vault2git"
@@ -33,6 +31,8 @@ Gem::Specification.new do |spec|
   spec.add_dependency "log4r", "~> 1.1"
   spec.add_dependency "nokogiri", "~> 1.13"
 
+  spec.add_development_dependency "aruba", "~> 2.1"
+  spec.add_development_dependency "cucumber", "~> 8.0"
   spec.add_development_dependency "rspec", "~> 3.2"
   spec.add_development_dependency "rubocop-github", "~> 0.17"
   spec.add_development_dependency "rubocop-performance", "~> 1.14"
