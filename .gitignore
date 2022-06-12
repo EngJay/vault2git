@@ -4,6 +4,20 @@ From-ATS/**/*
 # Generated log files.
 *.log
 
+# RubyGem-specific.
+/.bundle/
+/.yardoc
+/_yardoc/
+/coverage/
+/doc/
+/pkg/
+/spec/reports/
+/tmp/
+
+# rspec failure tracking
+.rspec_status
+
+
 # Common Ruby.
 # REF: https://raw.githubusercontent.com/github/gitignore/main/Ruby.gitignore
 *.gem
