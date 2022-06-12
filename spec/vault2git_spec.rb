@@ -10,6 +10,10 @@ RSpec.describe Vault2git do
 end
 
 RSpec.describe Vault2git::Options do
+  before do
+    suppress_log_output
+  end
+  
   # options = Vault2git::Options.new
 
   it "should exit cleanly when instantiated without arguments" do

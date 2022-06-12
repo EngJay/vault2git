@@ -3,7 +3,6 @@ require "ostruct"
 require "pp"
 
 module Vault2git
-
   # Options handling.
   class Options
     attr_reader :options
