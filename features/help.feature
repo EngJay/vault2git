@@ -1,5 +1,5 @@
 Feature: Help
-    In order to provide helpful info
+    In order to provide help
     As a CLI
     I want to display helpful info
 
