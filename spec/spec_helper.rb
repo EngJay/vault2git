@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "vault2git"
-require 'logger'
+require "logger"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
@@ -16,8 +16,14 @@ RSpec.configure do |config|
 end
 
 # Redirects puts to a null object.
+#
+# Usage:
+#
+#   before do
+#     suppress_log_output
+#   end
 def suppress_log_output
-  allow(STDOUT).to receive(:puts) # Disables puts.
-  logger = double('Logger').as_null_object
+  allow($stdout).to receive(:puts) # Disables puts.
+  logger = double("Logger").as_null_object
   allow(Logger).to receive(:new).and_return(logger)
 end

@@ -13,8 +13,6 @@ RSpec.describe Vault2git::Options do
   before do
     suppress_log_output
   end
-  
-  # options = Vault2git::Options.new
 
   it "should exit cleanly when instantiated without arguments" do
     expect { Vault2git::Options.new }.to raise_error(SystemExit) do |error|
