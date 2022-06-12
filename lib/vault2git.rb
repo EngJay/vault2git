@@ -5,6 +5,7 @@ require_relative "vault2git/options"
 require_relative "vault2git/converter"
 
 module Vault2git
+  # CLI entry point.
   class CLI
     def self.start
       options = Options.new

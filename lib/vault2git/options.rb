@@ -22,7 +22,7 @@ module Vault2git
 
     def parse_options
       OptionParser.new do |opts|
-        opts.banner = "Usage: vault2git.rb [options] $/source/folder dest/folder"
+        opts.banner = "Usage: vault2git [options] $/source/folder dest/folder"
         opts.separator ""
         opts.separator "Specific options:"
 
