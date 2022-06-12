@@ -105,6 +105,10 @@ GEM
       activesupport (>= 4.2.0)
       rack (>= 1.1)
       rubocop (>= 1.7.0, < 2.0)
+    rubocop-rake (0.6.0)
+      rubocop (~> 1.0)
+    rubocop-rspec (2.11.1)
+      rubocop (~> 1.19)
     ruby-progressbar (1.11.0)
     sys-uname (1.2.2)
       ffi (~> 1.1)
@@ -125,6 +129,8 @@ DEPENDENCIES
   rubocop-github (~> 0.17)
   rubocop-performance (~> 1.14)
   rubocop-rails (~> 2.14)
+  rubocop-rake (~> 0.6)
+  rubocop-rspec (~> 2.11)
   vault2git!
 
 BUNDLED WITH
