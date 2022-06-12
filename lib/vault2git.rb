@@ -9,6 +9,13 @@ module Vault2git
   # Your code goes here...
 end
 
+# Old top-level script:
+#
+# require "rubygems"
+# require "bundler"
+# require "./options"
+# require "./converter"
+
 # options = Options.new
 # converter = Converter.new(options.options)
 # converter.convert
