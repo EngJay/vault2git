@@ -31,7 +31,7 @@ module Vault2git
         opts.on("-u", "--username [username]", "The repository user") { |val| @options.username = val }
         opts.on("-p", "--password [password]", "The repository user's password") { |val| @options.password = val }
         opts.on("--vault-client-path path-to-vault.exe", "Path to vault.exe, defaults to #{@options.vault_client}") do |val|
-          @@options.vault_client = val
+          @options.vault_client = val
         end
         opts.on("--git-path path-to-git.exe", "Path to git.exe, defaults to #{@options.git}") { |val| @options.git = val }
         opts.on("--logfile filename", "File to log to (defaults to #{@options.logfile})") { |val| @options.logfile = val }
