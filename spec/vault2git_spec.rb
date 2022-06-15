@@ -115,8 +115,7 @@ RSpec.describe Vault2git::Converter do
   end
 
   describe "#quote_param" do
-
-    it "should return the values of the options" do  
+    it "should return the values of the options" do
       expected_username = @converter.quote_param(:username)
       expect(expected_username).to eq("mr_the_plague")
 
@@ -133,7 +132,7 @@ RSpec.describe Vault2git::Converter do
       expect(expected_logfile).to eq("non-default-filename.txt")
     end
 
-    it "should return the values of the arguments" do  
+    it "should return the values of the arguments" do
       expected_source = @converter.quote_param(:source)
       expect(expected_source).to eq("spec_source")
 
@@ -143,23 +142,22 @@ RSpec.describe Vault2git::Converter do
   end
 
   describe "#quote_value" do
-    
-    it "should return an empty string if passed nil" do  
+    it "should return an empty string if passed nil" do
       expected_empty_string = @converter.quote_value(nil)
       expect(expected_empty_string).to eq("")
     end
 
-    it "should return an empty string if passed an empty string" do  
+    it "should return an empty string if passed an empty string" do
       expected_empty_string = @converter.quote_value("")
       expect(expected_empty_string).to eq("")
     end
 
-    it "should return the argument if passed an argument without a space" do  
+    it "should return the argument if passed an argument without a space" do
       expected_without_a_space = @converter.quote_value("Spaceless!")
       expect(expected_without_a_space).to eq("Spaceless!")
     end
 
-    it "should return the argument wrapped in quotes if passed an argument with a space" do  
+    it "should return the argument wrapped in quotes if passed an argument with a space" do
       expected_arg_with_quotes = @converter.quote_value("Has space!")
       expect(expected_arg_with_quotes).to eq("\"Has space!\"")
     end
