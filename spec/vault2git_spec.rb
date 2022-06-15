@@ -94,75 +94,74 @@ end
 RSpec.describe Vault2git::Converter do
   before do
     suppress_log_output
+
+    # Remove the "spec" arg set by rspec, then set just the source arg.
+    ARGV.clear
+    ARGV.append("--username")
+    ARGV.append("mr_the_plague")
+    ARGV.append("--password")
+    ARGV.append("acid_burn")
+    ARGV.append("--vault-client-path")
+    ARGV.append("C:\\hack\\the\\planet.exe")
+    ARGV.append("--git-path")
+    ARGV.append("non\\standard\\git\\path")
+    ARGV.append("--logfile")
+    ARGV.append("non-default-filename.txt")
+    ARGV.append("spec_source")
+    ARGV.append("spec_dest")
+
+    @options = Vault2git::Options.new.options
+    @converter = Vault2git::Converter.new(@options)
   end
-  
+
   describe "#quote_param" do
-    
+
     it "should return the values of the options" do  
-      # Remove the "spec" arg set by rspec, then set just the source arg.
-      ARGV.clear
-      ARGV.append("--username")
-      ARGV.append("mr_the_plague")
-      ARGV.append("--password")
-      ARGV.append("acid_burn")
-      ARGV.append("--vault-client-path")
-      ARGV.append("C:\\hack\\the\\planet.exe")
-      ARGV.append("--git-path")
-      ARGV.append("non\\standard\\git\\path")
-      ARGV.append("--logfile")
-      ARGV.append("non-default-filename.txt")
-      ARGV.append("spec_source")
-      ARGV.append("spec_dest")
-
-      options = Vault2git::Options.new.options
-      converter = Vault2git::Converter.new(options)
-
-      expected_username = converter.quote_param(:username)
+      expected_username = @converter.quote_param(:username)
       expect(expected_username).to eq("mr_the_plague")
 
-      expected_password = converter.quote_param(:password)
+      expected_password = @converter.quote_param(:password)
       expect(expected_password).to eq("acid_burn")
 
-      expected_vault_client = converter.quote_param(:vault_client)
+      expected_vault_client = @converter.quote_param(:vault_client)
       expect(expected_vault_client).to eq("C:\\hack\\the\\planet.exe")
 
-      expected_git = converter.quote_param(:git)
+      expected_git = @converter.quote_param(:git)
       expect(expected_git).to eq("non\\standard\\git\\path")
 
-      expected_logfile = converter.quote_param(:logfile)
+      expected_logfile = @converter.quote_param(:logfile)
       expect(expected_logfile).to eq("non-default-filename.txt")
     end
 
     it "should return the values of the arguments" do  
-      # Remove the "spec" arg set by rspec, then set just the source arg.
-      ARGV.clear
-      ARGV.append("--username")
-      ARGV.append("mr_the_plague")
-      ARGV.append("--password")
-      ARGV.append("acid_burn")
-      ARGV.append("--vault-client-path")
-      ARGV.append("C:\\hack\\the\\planet.exe")
-      ARGV.append("--git-path")
-      ARGV.append("non\\standard\\git\\path")
-      ARGV.append("--logfile")
-      ARGV.append("non-default-filename.txt")
-      ARGV.append("spec_source")
-      ARGV.append("spec_dest")
-
-      options = Vault2git::Options.new.options
-      converter = Vault2git::Converter.new(options)
-
-      expected_source = converter.quote_param(:source)
+      expected_source = @converter.quote_param(:source)
       expect(expected_source).to eq("spec_source")
 
-      expected_dest = converter.quote_param(:dest)
+      expected_dest = @converter.quote_param(:dest)
       expect(expected_dest).to eq("spec_dest")
     end
   end
 
-  # def quote_value(value)
-  #   return "" unless value
+  describe "#quote_value" do
+    
+    it "should return an empty string if passed nil" do  
+      expected_empty_string = @converter.quote_value(nil)
+      expect(expected_empty_string).to eq("")
+    end
 
-  #   value.include?(" ") ? "\"#{value}\"" : value
-  # end
+    it "should return an empty string if passed an empty string" do  
+      expected_empty_string = @converter.quote_value("")
+      expect(expected_empty_string).to eq("")
+    end
+
+    it "should return the argument if passed an argument without a space" do  
+      expected_without_a_space = @converter.quote_value("Spaceless!")
+      expect(expected_without_a_space).to eq("Spaceless!")
+    end
+
+    it "should return the argument wrapped in quotes if passed an argument with a space" do  
+      expected_arg_with_quotes = @converter.quote_value("Has space!")
+      expect(expected_arg_with_quotes).to eq("\"Has space!\"")
+    end
+  end
 end
