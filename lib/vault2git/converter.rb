@@ -171,13 +171,13 @@ module Vault2git
       info "Ended at #{Time.now}"
     end
 
-    AUTHORS_FILE = "./authors.json"
+    AUTHORS_FILE = "./authors.json".freeze
     def parsed_authors
-      authors = Hash.new()
+      authors = {}
 
-      if File.exists? AUTHORS_FILE then
+      if File.exist? AUTHORS_FILE
         info "Reading authors file"
-        authors_file = open(AUTHORS_FILE)
+        authors_file = File.open(AUTHORS_FILE)
         authors_json = authors_file.read
         authors = JSON.parse(authors_json)
       end
