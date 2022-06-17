@@ -39,4 +39,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rubocop-rails", "~> 2.14"
   spec.add_development_dependency "rubocop-rake", "~>  0.6"
   spec.add_development_dependency "rubocop-rspec", "~>  2.11"
+  spec.add_development_dependency "simplecov", "~>  0.21"
 end
