@@ -3,6 +3,8 @@ require "fileutils"
 require "time"
 require "log4r"
 require "pp"
+require "date"
+require "json"
 
 module Vault2git
   GITIGNORE = <<~IGNORED.freeze
