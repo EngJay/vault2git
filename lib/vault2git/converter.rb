@@ -142,6 +142,12 @@ module Vault2git
         hash
       end
 
+      # vault_command 'getversion', ["-backup no", "-merge overwrite", "-setfiletime checkin", "-performdeletions removeworkingcopy", version[:version]], $options.dest
+      # comments = [version[:comment], "Original Vault commit: version #{version[:version]} on #{version[:date]} by #{version[:user]} (txid=#{version[:txid]})"].compact.map{|c|c.gsub('"', '\"')}
+      # git_commit comments, "--date=\"#{Time.strptime(version[:date], "%m/%d/%Y %l:%M:%S %p").strftime('%Y-%m-%dT%H:%M:%S')}\"", (if authors.key?(version[:user]) then "--author=\"#{authors[version[:user]]["name"]} <#{authors[version[:user]]["email"]}>\"" else "" end)
+      # git_command 'gc' if count % 20 == 0 || count == versions.size
+      # GC.start if count % 20 == 0 # Force Ruby GC (might speed things up?)
+
       count = 0
       versions.sort_by { |v| v[:version].to_i }.each_with_index do |version, _i|
         count += 1
@@ -163,16 +169,15 @@ module Vault2git
       info "Ended at #{Time.now}"
     end
 
-    AUTHORS_FILE = "authors.xml".freeze
+    AUTHORS_FILE = "./authors.json"
     def parsed_authors
-      authors = {}
+      authors = Hash.new()
 
-      if File.exist? AUTHORS_FILE
+      if File.exists? AUTHORS_FILE then
         info "Reading authors file"
-        doc = Nokogiri::XML(File.open(AUTHORS_FILE))
-        doc.children.each do |item|
-          authors[item[:vaultname]] = "#{item[:name]} <#{item[:email]}>"
-        end
+        authors_file = open(AUTHORS_FILE)
+        authors_json = authors_file.read
+        authors = JSON.parse(authors_json)
       end
 
       authors

@@ -1,5 +1,5 @@
-# Uneeded log files.
-From-ATS/**/*
+# Default authors file.
+authors.json
 
 # Generated log files.
 *.log
