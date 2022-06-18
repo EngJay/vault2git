@@ -1,7 +1,8 @@
 # frozen_string_literal: true
-require 'codecov'
+
+require "codecov"
 require "logger"
-require 'simplecov'
+require "simplecov"
 require "vault2git"
 
 SimpleCov.start

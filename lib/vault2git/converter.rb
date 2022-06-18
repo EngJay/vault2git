@@ -143,7 +143,7 @@ module Vault2git
         end
         hash
       end
-      
+
       count = 0
       versions.sort_by { |v| v[:version].to_i }.each_with_index do |version, _i|
         count += 1
@@ -151,23 +151,9 @@ module Vault2git
         clear_working_folder
 
         # Fix timestamp format but should be arg.
-        vault_command 'getversion', ["-backup no", "-merge overwrite", "-setfiletime checkin", "-performdeletions removeworkingcopy", version[:version]], @options.dest
-        comments = [version[:comment], "Original Vault commit: version #{version[:version]} on #{version[:date]} by #{version[:user]} (txid=#{version[:txid]})"].compact.map{|c|c.gsub('"', '\"')}
-        git_commit comments, "--date=\"#{Time.strptime(version[:date], "%m/%d/%Y %l:%M:%S %p").strftime('%Y-%m-%dT%H:%M:%S')}\"", (if authors.key?(version[:user]) then "--author=\"#{authors[version[:user]]["name"]} <#{authors[version[:user]]["email"]}>\"" else "" end)
-        git_command 'gc' if count % 20 == 0 || count == versions.size
-        GC.start if count % 20 == 0 # Force Ruby GC (might speed things up?)
-
-        # vault_command "getversion",
-        #               ["-backup no", "-merge overwrite", "-setfiletime checkin", "-performdeletions removeworkingcopy", version[:version]], @options.dest
-        # comments = [version[:comment],
-        #             "Original Vault commit: version #{version[:version]} on #{version[:date]} by #{version[:user]} (txid=#{version[:txid]})"].compact.map do |c|
-        #   c.gsub('"', '\"')
-        # end
-        # git_commit comments,
-        #            "--date=\"#{Time.zone.parse(version[:date]).strftime('%Y-%m-%dT%H:%M:%S')}\"",
-        #            ((authors.key? version[:user]) ? "--author=\"#{authors[version[:user]]}\"" : "")
-        # git_command "gc" if (count % 20).zero? || count == versions.size
-        # GC.start if (count % 20).zero? # Force Ruby GC (might speed things up?)
+        vault_command "getversion", ["-backup no", "-merge overwrite", "-setfiletime checkin", "-performdeletions removeworkingcopy", version[:version]], @options.dest
+        comments = [version[:comment], "Original Vault commit: version #{version[:version]} on #{version[:date]} by #{version[:user]} (txid=#{version[:txid]})"].compact.map { |c| c.gsub('"', '\"') }
+        git_commit comments, "--date=\"#{Time.strptime(version[:date], '%m/%d/%Y %l:%M:%S %p').strftime('%Y-%m-%dT%H:%M:%S')}\"", (authors.key?(version[:user]) ? "--author=\"#{authors[version[:user]]['name']} <#{authors[version[:user]]['email']}>\"" : "")
       end
 
       info "Ended at #{Time.now}"
