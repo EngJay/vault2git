@@ -64,6 +64,16 @@ contexts. The key new feature planned is automatic validation of a migration
 by generating and comparing hashes of each Vault check-in against the 
 correpsonding Git commit.
 
+### Process
+
+Given a Vault project path, it creates a new Git repository, fetches the list of Vault check-ins, then iterates through each of the check-ins performing the following steps:
+
+- clear out the Git repository folder (except `.git*` files)
+- fetch the current check-in's files from Vault
+- add and commit the files to Git, including a commit message that is either the message associated with the Vault check-in or its metadata. 
+
+The comments written to Git include the original Vault comments (if any) plus a one-liner containing the original Vault version number, check-in time, etc. The original Vault check-in time is used as the commit's time.
+
 ### Built With
 
 - Ruby
@@ -102,6 +112,8 @@ Specific options:
         --logfile filename           File to log to (defaults to vault2git.log)
     -h, --help                       Display this help screen
 ```
+
+Wrap parameter values in double-quotes as required. _IMPORTANT: the paths MUST use forward slashes to delimit folders even in Windows._
 
 ## Support
 
