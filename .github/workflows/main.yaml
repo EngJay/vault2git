@@ -2,14 +2,18 @@ name: vault2git
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: 
+      - main
+      - develop
   pull_request:
-    branches: [ main, develop ]
+    branches:
+      - main
+      - develop
   workflow_dispatch:
 
 jobs:
   specs:
-    name: Specs
+    name: Specs with Coverage
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -55,31 +59,3 @@ jobs:
         with:
           name: reports
           path: reports
-
-# name: Ruby
-
-# on:
-#   push:
-#     branches:
-#       - master
-
-#   pull_request:
-
-# jobs:
-#   build:
-#     runs-on: ubuntu-latest
-#     name: Ruby ${{ matrix.ruby }}
-#     strategy:
-#       matrix:
-#         ruby:
-#           - '3.1.2'
-
-#     steps:
-#     - uses: actions/checkout@v3
-#     - name: Set up Ruby
-#       uses: ruby/setup-ruby@v1
-#       with:
-#         ruby-version: ${{ matrix.ruby }}
-#         bundler-cache: true
-#     - name: Run the default task
-#       run: bundle exec rake
