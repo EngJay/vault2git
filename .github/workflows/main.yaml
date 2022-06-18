@@ -1,13 +1,49 @@
-name: Ruby
+name: vault2git
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: 
+      - main
+      - develop
   pull_request:
-    branches: [ main, develop ]
+    branches:
+      - main
+      - develop
   workflow_dispatch:
 
 jobs:
+  specs:
+    name: Specs with Coverage
+    runs-on: ubuntu-latest
+    env:
+      COVERAGE: true
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@359bebbc29cbe6c87da6bc9ea3bc930432750108
+        with:
+          ruby-version: '3.1'
+      - name: Install dependencies
+        run: bundle install
+      - name: Run specs
+        run: bundle exec rspec spec
+      - name: Upload coverage reports
+        uses: codecov/codecov-action@v2
+
+  features:
+    name: Features
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@359bebbc29cbe6c87da6bc9ea3bc930432750108
+        with:
+          ruby-version: '3.1'
+      - name: Install dependencies
+        run: bundle install
+      - name: Run Features
+        run: bundle exec cucumber features
+
   static-analysis:
     name: Static Analysis
     runs-on: ubuntu-latest

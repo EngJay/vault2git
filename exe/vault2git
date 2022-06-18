@@ -1,0 +1,3 @@
+#!/usr/bin/env ruby
+require "vault2git"
+Vault2git::CLI.start

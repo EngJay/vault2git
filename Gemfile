@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 source "https://rubygems.org"
 
-gem "log4r", "~> 1.1.10"
-gem "nokogiri", "~> 1.13.6"
+# Specify your gem's dependencies in vault2git.gemspec
+gemspec
 
-gem "rubocop-github"
-gem "rubocop-performance", require: false
-gem "rubocop-rails", require: false
+gem "rake", "~> 13.0"
+gem "rspec", "~> 3.2"
+gem "rubocop", "~> 1.21"
