@@ -1,12 +1,14 @@
 # frozen_string_literal: true
 
-require "codecov"
-require "logger"
+# Must be started before application code is loaded in order to track files.
 require "simplecov"
-require "vault2git"
-
 SimpleCov.start
+
+require "codecov"
 SimpleCov.formatter = SimpleCov::Formatter::Codecov
+
+require "logger"
+require "vault2git"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
