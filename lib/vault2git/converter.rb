@@ -56,6 +56,10 @@ module Vault2git
       value.include?(" ") ? "\"#{value}\"" : value
     end
 
+    def escape_quotes(str)
+      str.gsub "'", "''"
+    end
+
     def vault_command(command, options = [], args = [], append_source_folder = true)
       parts = []
       parts << quote_param(:vault_client)
@@ -152,7 +156,7 @@ module Vault2git
 
         # Fix timestamp format but should be arg.
         vault_command "getversion", ["-backup no", "-merge overwrite", "-setfiletime checkin", "-performdeletions removeworkingcopy", version[:version]], @options.dest
-        comments = [version[:comment], "Original Vault commit: version #{version[:version]} on #{version[:date]} by #{version[:user]} (txid=#{version[:txid]})"].compact.map { |c| c.gsub('"', '\"') }
+        comments = [version[:comment], "Original Vault commit: version #{version[:version]} on #{version[:date]} by #{version[:user]} (txid=#{version[:txid]})"].compact.map { |c| escape_quotes(c) }
         git_commit comments, "--date=\"#{Time.strptime(version[:date], '%m/%d/%Y %l:%M:%S %p').strftime('%Y-%m-%dT%H:%M:%S')}\"", (authors.key?(version[:user]) ? "--author=\"#{authors[version[:user]]['name']} <#{authors[version[:user]]['email']}>\"" : "")
       end
 
