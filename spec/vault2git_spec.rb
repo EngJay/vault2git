@@ -162,4 +162,16 @@ RSpec.describe Vault2git::Converter do
       expect(expected_arg_with_quotes).to eq("\"Has space!\"")
     end
   end
+
+  # describe "#parsed_authors" do
+  #   it "should return the parsed authors given a authors.json file" do
+  #     allow(File).to receive(:exists?).and_return(true)
+  #     # allow(JSON).to receive(:parse).with(AUTHORS_JSON)
+
+  #     @converter.parsed_authors
+
+  #     expect(File).to have_received(:exists?).with("./authors.json")
+  #     # expect(File).to have_received(:parse).with(AUTHORS_JSON)
+  #   end
+  # end
 end

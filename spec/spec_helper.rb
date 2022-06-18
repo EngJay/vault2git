@@ -1,7 +1,11 @@
 # frozen_string_literal: true
-
-require "vault2git"
+require 'codecov'
 require "logger"
+require 'simplecov'
+require "vault2git"
+
+SimpleCov.start
+SimpleCov.formatter = SimpleCov::Formatter::Codecov
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

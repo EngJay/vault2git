@@ -19,12 +19,10 @@ jobs:
           ruby-version: '3.1'
       - name: Install dependencies
         run: bundle install
-      - uses: paambaati/codeclimate-action@v2.2.4
-        name: Run Specs
-        env:
-          CC_TEST_REPORTER_ID: 945dfb58a832d233a3caeb84e3e6d3be212e8c7abcb48117fce63b9adcb43647
-        with:
-          coverageCommand: bundle exec rspec spec
+      - name: Run specs
+        run: bundle exec rspec spec
+      - name: Upload coverage reports
+        uses: codecov/codecov-action@v2
 
   features:
     name: Features
