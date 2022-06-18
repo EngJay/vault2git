@@ -24,6 +24,8 @@
 [![Pull Requests welcome](https://img.shields.io/badge/PRs-welcome-ff69b4.svg?style=flat-square)](https://github.com/EngJay/vault2git/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22)
 [![made with love by EngJay](https://img.shields.io/badge/made%20with%20%E2%99%A5%20by-EngJay-ff1414.svg?style=flat-square)](https://github.com/EngJay)
 
+[![codecov](https://codecov.io/gh/EngJay/vault2git/branch/main/graph/badge.svg?token=6U63HP2JUE)](https://codecov.io/gh/EngJay/vault2git)
+
 </div>
 
 <details open="open">
