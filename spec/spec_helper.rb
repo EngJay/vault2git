@@ -2,7 +2,7 @@
 
 # Must be started before application code is loaded in order to track files.
 require "simplecov"
-SimpleCov.start
+SimpleCov.start if ENV["COVERAGE"]
 
 require "codecov"
 SimpleCov.formatter = SimpleCov::Formatter::Codecov
