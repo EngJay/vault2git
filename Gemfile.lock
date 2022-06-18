@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    vault2git (0.1.0)
+    vault2git (0.1.0.pre)
       log4r (~> 1.1)
       nokogiri (~> 1.13)
 
