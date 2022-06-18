@@ -13,6 +13,8 @@ end
 RSpec.describe Vault2git::Options do
   before do
     suppress_log_output
+    # Remove the "spec" arg set by rspec.
+    ARGV.clear
   end
 
   it "should exit cleanly when instantiated without arguments" do
@@ -22,8 +24,6 @@ RSpec.describe Vault2git::Options do
   end
 
   it "should exit cleanly when instantiated with one argument" do
-    # Remove the "spec" arg set by rspec.
-    ARGV.clear
     ARGV.append("spec_source")
 
     expect { Vault2git::Options.new }.to raise_error(SystemExit) do |error|
@@ -32,8 +32,6 @@ RSpec.describe Vault2git::Options do
   end
 
   it "should construct options with defaults with two arguments and no options" do
-    # Remove the "spec" arg set by rspec.
-    ARGV.clear
     ARGV.append("spec_source")
     ARGV.append("spec_dest")
 
@@ -47,8 +45,6 @@ RSpec.describe Vault2git::Options do
   end
 
   it "should construct options with defaults with two arguments and username and password" do
-    # Remove the "spec" arg set by rspec, then set just the source arg.
-    ARGV.clear
     ARGV.append("--username")
     ARGV.append("mr_the_plague")
     ARGV.append("--password")
@@ -66,8 +62,6 @@ RSpec.describe Vault2git::Options do
   end
 
   it "should construct options with two arguments and additonal options" do
-    # Remove the "spec" arg set by rspec, then set just the source arg.
-    ARGV.clear
     ARGV.append("--username")
     ARGV.append("mr_the_plague")
     ARGV.append("--password")
