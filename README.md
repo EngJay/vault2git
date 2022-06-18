@@ -2,6 +2,8 @@
 
 Creates a Git repository from a SourceGear Vault repository.
 
+[![codecov](https://codecov.io/gh/EngJay/vault2git/branch/main/graph/badge.svg?token=6U63HP2JUE)](https://codecov.io/gh/EngJay/vault2git)
+
 ## About
 
 TODO
