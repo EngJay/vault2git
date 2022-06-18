@@ -23,6 +23,8 @@ GEM
     ast (2.4.2)
     builder (3.2.4)
     childprocess (4.1.0)
+    codecov (0.6.0)
+      simplecov (>= 0.15, < 0.22)
     concurrent-ruby (1.1.10)
     contracts (0.17)
     cucumber (8.0.0)
@@ -129,6 +131,7 @@ PLATFORMS
 
 DEPENDENCIES
   aruba (~> 2.1)
+  codecov (~> 0.6.0)
   cucumber (~> 8.0)
   rake (~> 13.0)
   rspec (~> 3.2)
