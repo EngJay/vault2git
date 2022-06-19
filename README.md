@@ -50,29 +50,36 @@
 
 ## About
 
-The vault2git project provides a simple command line tool for migrating a
+The vault2git gem provides a simple command line tool for migrating a
 [SourceGear Vault](http://www.sourcegear.com/vault/) project to a
 [Git](https://git-scm.com/) repository.
 
-This fork of the original Ruby port by @slamotte updates the dependencies to
-current, adds quality control, converts the script to a RubyGem, and will
-add additional features in subsequent releases.
+This fork of the original Ruby script by
+[@slamotte](https://github.com/slamotte/vault2git) updates the dependencies to
+current, adds quality control, converts the script to a gem available from the
+[RubyGems repostiory](https://rubygems.org/), and will add a few additional
+features in subsequent releases.
 
 Ultimately, the aim is to provide a simple to use, high-quality command line
-tool for migrating a project from SourceGear Vault to Git in high-scrutiny 
+tool for migrating a project from SourceGear Vault to Git in high-scrutiny
 contexts. The key new feature planned is automatic validation of a migration
-by generating and comparing hashes of each Vault check-in against the 
+by generating and comparing hashes of each Vault check-in against the
 correpsonding Git commit.
 
 ### Process
 
-Given a Vault project path, it creates a new Git repository, fetches the list of Vault check-ins, then iterates through each of the check-ins performing the following steps:
+Given a Vault project path, vault2git creates a new Git repository, fetches the list
+of Vault check-ins, then iterates through each of the check-ins performing the
+following steps:
 
 - clear out the Git repository folder (except `.git*` files)
 - fetch the current check-in's files from Vault
-- add and commit the files to Git, including a commit message that is either the message associated with the Vault check-in or its metadata. 
+- add and commit the files to Git, including a commit message that is either the
+message associated with the Vault check-in or its metadata.
 
-The comments written to Git include the original Vault comments (if any) plus a one-liner containing the original Vault version number, check-in time, etc. The original Vault check-in time is used as the commit's time.
+The comments written to Git include the original Vault comments (if any) plus a
+one-liner containing the original Vault version number, check-in time, etc. The
+original Vault check-in time is used as the commit's time.
 
 ### Built With
 
@@ -80,25 +87,32 @@ The comments written to Git include the original Vault comments (if any) plus a 
 - log4r
 - nokogiri
 
+### External Dependencies
+
+- Git
+- SourceGear Vault client
+
 ## Getting Started
 
 ### Prerequisites
 
 - Have Git installed.
-- Have a SourceGear Vault client installed. 
+- Have a SourceGear Vault client installed.
 - Have the current stable version of Ruby (3.1.2).
 
 ### Installation
 
-To install vault2git, install the gem at the user level.
+To install vault2git, install the gem at the user level using bundler. This will
+install it to a hidden directory in the root of the user account which might
+need to be added to the path.
 
-```
+```text
 $ bundle install --user-install vault2git
 ```
 
 ## Usage
 
-```
+```text
 Usage: vault2git [options] $/source/folder dest/folder
 
 Specific options:
@@ -113,11 +127,12 @@ Specific options:
     -h, --help                       Display this help screen
 ```
 
-Wrap parameter values in double-quotes as required. _IMPORTANT: the paths MUST use forward slashes to delimit folders even in Windows._
+Wrap parameter values in double-quotes as required. _IMPORTANT: the paths MUST
+use forward slashes to delimit folders even in Windows._
 
 ## Support
 
-Reach out to the maintainer by opening an 
+Reach out to the maintainers by opening an
 [issue](https://github.com/EngJay/vault2git/issues/new?assignees=&labels=question&template=04_QUESTION.md&title=support%3A+).
 
 ## Project Assistance
@@ -130,16 +145,24 @@ If you want to say **thank you** or/and support active development of vault2git:
 
 ## Contributing
 
-First off, thanks for taking the time to contribute! Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make will benefit everybody else and are **greatly appreciated**.
+First off, thanks for taking the time to contribute! Contributions are what make
+the open-source community such an amazing place to learn, inspire, and create.
+Any contributions you make will benefit everybody else and are **greatly
+appreciated**.
 
-
-Please read [our contribution guidelines](docs/CONTRIBUTING.md), and thank you for being involved!
+To contribute to vault2git, open an issue or a pull request with your proposal
+and the maintainers will respond. Please note we have a
+[code of conduct](docs/CODE_OF_CONDUCT.md); please follow it in all your interactions
+with the project, and thank you for being involved!
 
 ## Security
 
-This project follows good practices of security, but 100% security cannot be assured. The vault2git RubyGem is provided **"as is"** without any **warranty**. Use at your own risk.
+This project follows good practices of security, but 100% security cannot be
+assured. The vault2git RubyGem is provided **"as is"** without any **warranty**.
+Use at your own risk.
 
-_For more information and to report security issues, please refer to our [security documentation](docs/SECURITY.md)._
+_For more information and to report security issues, please refer to our
+[security documentation](docs/SECURITY.md)._
 
 ## License
 
@@ -149,6 +172,11 @@ See [LICENSE](LICENSE.txt) for more information.
 
 ## Acknowledgements
 
-This appears to be the original C# project: [vault2git](https://github.com/AndreyNikiforov/vault2git) by Andrey Nikiforov ([@AndreyNikiforov](https://github.com/AndreyNikiforov)) and Jevgeni Zelenkov ([@jayzelenkov](https://github.com/jayzelenkov)).  
+This appears to be the original C# project: 
+[vault2git](https://github.com/AndreyNikiforov/vault2git) by Andrey Nikiforov
+([@AndreyNikiforov](https://github.com/AndreyNikiforov)) and Jevgeni Zelenkov
+([@jayzelenkov](https://github.com/jayzelenkov)).  
 
-Contribution of the original [Ruby port](https://github.com/slamotte/vault2git) from which this project is forked:  Steve Lamotte ([@slamotte](https://github.com/slamotte))
+Contribution of the original [Ruby port](https://github.com/slamotte/vault2git)
+from which this project is forked:  Steve Lamotte
+([@slamotte](https://github.com/slamotte))
