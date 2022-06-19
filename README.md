@@ -1,14 +1,8 @@
 <h1 align="center">
-  <a href="https://github.com/EngJay/vault2git">
-    <!-- Please provide path to your logo here -->
-    <img src="docs/images/logo.svg" alt="Logo" width="100" height="100">
-  </a>
+vault2git
 </h1>
 
 <div align="center">
-  vault2git
-  <br />
-  <br />
   <a href="https://github.com/EngJay/vault2git/issues/new?assignees=&labels=bug&template=01_DEFECT_REPORT.md&title=Defect%3A+">Report a Defect</a>
   ·
   <a href="https://github.com/EngJay/vault2git/issues/new?assignees=&labels=enhancement&template=02_FEATURE_REQUEST.md&title=feat%3A+">Request a Feature</a>
