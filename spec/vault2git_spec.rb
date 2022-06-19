@@ -157,6 +157,13 @@ RSpec.describe Vault2git::Converter do
     end
   end
 
+  describe "#escape_quotes" do
+    it "should escape quotes" do
+      expected_arg_with_quotes_escaped = @converter.escape_quotes("'Has quotes!'")
+      expect(expected_arg_with_quotes_escaped).to eq("''Has quotes!''")
+    end
+  end
+
   # describe "#parsed_authors" do
   #   it "should return the parsed authors given a authors.json file" do
   #     allow(File).to receive(:exists?).and_return(true)
