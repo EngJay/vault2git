@@ -1,0 +1,12 @@
+{
+  "ghopper": {
+    "vaultname": "ghopper",
+    "name": "Grace Hopper",
+    "email": "ghopper@example.com"
+  },
+  "kjohnson": {
+    "vaultname": "kjohnson",
+    "name": "Katherine Johnson",
+    "email": "kjohnson@example.com"
+  }
+}

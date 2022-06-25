@@ -42,6 +42,7 @@ RSpec.describe Vault2git::Options do
     expect(options.vault_client).to eq('C:\\Program Files\\SourceGear\\Vault Client\\vault.exe')
     expect(options.git).to eq("git")
     expect(options.logfile).to eq("vault2git.log")
+    expect(options.authorsfile).to eq("authors.json")
   end
 
   it "should construct options with defaults with two arguments and username and password" do
@@ -59,6 +60,7 @@ RSpec.describe Vault2git::Options do
     expect(options.vault_client).to eq("C:\\Program Files\\SourceGear\\Vault Client\\vault.exe")
     expect(options.git).to eq("git")
     expect(options.logfile).to eq("vault2git.log")
+    expect(options.authorsfile).to eq("authors.json")
   end
 
   it "should construct options with two arguments and additonal options" do
@@ -72,6 +74,8 @@ RSpec.describe Vault2git::Options do
     ARGV.append("non\\standard\\git\\path")
     ARGV.append("--logfile")
     ARGV.append("non-default-filename.txt")
+    ARGV.append("--authorsfile")
+    ARGV.append("non-default-authors.json")
     ARGV.append("spec_source")
     ARGV.append("spec_dest")
 
@@ -82,12 +86,13 @@ RSpec.describe Vault2git::Options do
     expect(options.vault_client).to eq("C:\\hack\\the\\planet.exe")
     expect(options.git).to eq("non\\standard\\git\\path")
     expect(options.logfile).to eq("non-default-filename.txt")
+    expect(options.authorsfile).to eq("non-default-authors.json")
   end
 end
 
 RSpec.describe Vault2git::Converter do
   before do
-    suppress_log_output
+    # suppress_log_output
 
     # Remove the "spec" arg set by rspec, then set just the source arg.
     ARGV.clear
@@ -101,6 +106,8 @@ RSpec.describe Vault2git::Converter do
     ARGV.append("non\\standard\\git\\path")
     ARGV.append("--logfile")
     ARGV.append("non-default-filename.txt")
+    ARGV.append("--authorsfile")
+    ARGV.append("support\\fixtures\\authors.json")
     ARGV.append("spec_source")
     ARGV.append("spec_dest")
 
@@ -124,6 +131,9 @@ RSpec.describe Vault2git::Converter do
 
       expected_logfile = @converter.quote_param(:logfile)
       expect(expected_logfile).to eq("non-default-filename.txt")
+
+      expected_authorsfile = @converter.quote_param(:authorsfile)
+      expect(expected_authorsfile).to eq("support\\fixtures\\authors.json")
     end
 
     it "should return the values of the arguments" do
@@ -164,15 +174,47 @@ RSpec.describe Vault2git::Converter do
     end
   end
 
-  # describe "#parsed_authors" do
-  #   it "should return the parsed authors given a authors.json file" do
-  #     allow(File).to receive(:exists?).and_return(true)
-  #     # allow(JSON).to receive(:parse).with(AUTHORS_JSON)
+  describe "#parsed_authors" do
+    it "should return the parsed authors given an authors.json file" do
 
-  #     @converter.parsed_authors
 
-  #     expect(File).to have_received(:exists?).with("./authors.json")
-  #     # expect(File).to have_received(:parse).with(AUTHORS_JSON)
-  #   end
-  # end
+      # authors = @converter.parsed_authors
+
+      # AUTHORS_FILE = "./authors.json".freeze
+      # def parsed_authors
+      #   authors = {}
+
+      #   if File.exist? AUTHORS_FILE
+      #     info "Reading authors file"
+      #     authors_file = File.open(AUTHORS_FILE)
+      #     authors_json = authors_file.read
+      #     authors = JSON.parse(authors_json)
+      #   end
+
+      #   authors
+      # end
+    end
+    
+    it "should parse authors" do
+      authors = @converter.parsed_authors
+
+      expect(authors["ghopper"].vaultname).to eq("ghopper")
+      expect(authors["ghopper"].name).to eq("Grace Hopper")
+      expect(authors["ghopper"].email).to eq("ghopper@example.com")
+
+      expect(authors["kjohnson"].vaultname).to eq("kjohnson")
+      expect(authors["kjohnson"].name).to eq("Katherine Johnson")
+      expect(authors["kjohnson"].email).to eq("kjohnson@example.com")
+    end
+  end
+
+    describe "fake service" do
+    it "should respond" do
+      uri = URI('https://api.github.com/repos/thoughtbot/factory_bot/contributors')
+
+      response = JSON.load(Net::HTTP.get(uri))
+
+      expect(response.first['login']).to eq 'joshuaclayton'
+    end
+  end
 end
