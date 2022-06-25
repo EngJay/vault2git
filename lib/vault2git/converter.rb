@@ -127,7 +127,7 @@ module Vault2git
     def convert
       info "Starting at #{Time.now}"
       debug "Parameters: #{@options.inspect}"
-      authors = parsed_authors
+      authors = parsed_authors(@options.authorsfile)
       info "Prepare destination folder"
       FileUtils.rm_rf @options.dest
       git_command "init", quote_value(@options.dest)
@@ -163,13 +163,12 @@ module Vault2git
       info "Ended at #{Time.now}"
     end
 
-    AUTHORS_FILE = "./authors.json".freeze
-    def parsed_authors
+    def parsed_authors(path)
       authors = {}
 
-      if File.exist? AUTHORS_FILE
+      if File.exist? path
         info "Reading authors file"
-        authors_file = File.open(AUTHORS_FILE)
+        authors_file = File.open(path)
         authors_json = authors_file.read
         authors = JSON.parse(authors_json)
       end

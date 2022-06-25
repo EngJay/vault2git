@@ -9,8 +9,8 @@ SimpleCov.formatter = SimpleCov::Formatter::Codecov
 
 require "logger"
 require "vault2git"
-require 'webmock/rspec'
-require 'support/fake_vault'
+require "webmock/rspec"
+require "support/fake_vault"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

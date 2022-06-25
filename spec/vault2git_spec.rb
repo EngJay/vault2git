@@ -92,7 +92,7 @@ end
 
 RSpec.describe Vault2git::Converter do
   before do
-    # suppress_log_output
+    suppress_log_output
 
     # Remove the "spec" arg set by rspec, then set just the source arg.
     ARGV.clear
@@ -103,11 +103,11 @@ RSpec.describe Vault2git::Converter do
     ARGV.append("--vault-client-path")
     ARGV.append("C:\\hack\\the\\planet.exe")
     ARGV.append("--git-path")
-    ARGV.append("non\\standard\\git\\path")
+    ARGV.append("non/standard/git/path")
     ARGV.append("--logfile")
     ARGV.append("non-default-filename.txt")
     ARGV.append("--authorsfile")
-    ARGV.append("support\\fixtures\\authors.json")
+    ARGV.append("spec/support/fixtures/authors.json")
     ARGV.append("spec_source")
     ARGV.append("spec_dest")
 
@@ -127,13 +127,13 @@ RSpec.describe Vault2git::Converter do
       expect(expected_vault_client).to eq("C:\\hack\\the\\planet.exe")
 
       expected_git = @converter.quote_param(:git)
-      expect(expected_git).to eq("non\\standard\\git\\path")
+      expect(expected_git).to eq("non/standard/git/path")
 
       expected_logfile = @converter.quote_param(:logfile)
       expect(expected_logfile).to eq("non-default-filename.txt")
 
       expected_authorsfile = @converter.quote_param(:authorsfile)
-      expect(expected_authorsfile).to eq("support\\fixtures\\authors.json")
+      expect(expected_authorsfile).to eq("spec/support/fixtures/authors.json")
     end
 
     it "should return the values of the arguments" do
@@ -175,46 +175,26 @@ RSpec.describe Vault2git::Converter do
   end
 
   describe "#parsed_authors" do
-    it "should return the parsed authors given an authors.json file" do
+    it "should parse authors from given path" do
+      authors = @converter.parsed_authors("spec/support/fixtures/authors.json")
 
+      expect(authors["ghopper"]["vaultname"]).to eq("ghopper")
+      expect(authors["ghopper"]["name"]).to eq("Grace Hopper")
+      expect(authors["ghopper"]["email"]).to eq("ghopper@example.com")
 
-      # authors = @converter.parsed_authors
-
-      # AUTHORS_FILE = "./authors.json".freeze
-      # def parsed_authors
-      #   authors = {}
-
-      #   if File.exist? AUTHORS_FILE
-      #     info "Reading authors file"
-      #     authors_file = File.open(AUTHORS_FILE)
-      #     authors_json = authors_file.read
-      #     authors = JSON.parse(authors_json)
-      #   end
-
-      #   authors
-      # end
-    end
-    
-    it "should parse authors" do
-      authors = @converter.parsed_authors
-
-      expect(authors["ghopper"].vaultname).to eq("ghopper")
-      expect(authors["ghopper"].name).to eq("Grace Hopper")
-      expect(authors["ghopper"].email).to eq("ghopper@example.com")
-
-      expect(authors["kjohnson"].vaultname).to eq("kjohnson")
-      expect(authors["kjohnson"].name).to eq("Katherine Johnson")
-      expect(authors["kjohnson"].email).to eq("kjohnson@example.com")
+      expect(authors["kjohnson"]["vaultname"]).to eq("kjohnson")
+      expect(authors["kjohnson"]["name"]).to eq("Katherine Johnson")
+      expect(authors["kjohnson"]["email"]).to eq("kjohnson@example.com")
     end
   end
 
-    describe "fake service" do
+  describe "fake service" do
     it "should respond" do
-      uri = URI('https://api.github.com/repos/thoughtbot/factory_bot/contributors')
+      uri = URI("https://api.github.com/repos/thoughtbot/factory_bot/contributors")
 
-      response = JSON.load(Net::HTTP.get(uri))
+      response = JSON.parse(Net::HTTP.get(uri))
 
-      expect(response.first['login']).to eq 'joshuaclayton'
+      expect(response.first["login"]).to eq "joshuaclayton"
     end
   end
 end
