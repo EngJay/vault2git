@@ -24,7 +24,7 @@ RSpec.configure do |config|
   end
 
   config.before(:each) do
-    stub_request(:any, /api.github.com/).to_rack(FakeGitHub)
+    stub_request(:any, /api\.github.com/).to_rack(FakeGitHub)
   end
 end
 
