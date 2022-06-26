@@ -1,5 +1,5 @@
 # Default authors file.
-authors.json
+/authors.json
 
 # Generated log files.
 *.log

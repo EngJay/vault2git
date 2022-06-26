@@ -16,6 +16,7 @@ module Vault2git
       @options.vault_client = 'C:\\Program Files\\SourceGear\\Vault Client\\vault.exe'
       @options.git = "git"
       @options.logfile = "vault2git.log"
+      @options.authorsfile = "authors.json"
 
       parse_options
     end
@@ -35,6 +36,7 @@ module Vault2git
         end
         opts.on("--git-path path-to-git.exe", "Path to git.exe, defaults to #{@options.git}") { |val| @options.git = val }
         opts.on("--logfile filename", "File to log to (defaults to #{@options.logfile})") { |val| @options.logfile = val }
+        opts.on("--authorsfile filename", "File to log to (defaults to #{@options.authorsfile})") { |val| @options.authorsfile = val }
 
         opts.on("-h", "--help", "Display this help screen") do
           puts opts

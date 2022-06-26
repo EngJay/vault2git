@@ -9,6 +9,8 @@ SimpleCov.formatter = SimpleCov::Formatter::Codecov
 
 require "logger"
 require "vault2git"
+require "webmock/rspec"
+require "support/fake_vault"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
@@ -19,6 +21,10 @@ RSpec.configure do |config|
 
   config.expect_with :rspec do |c|
     c.syntax = :expect
+  end
+
+  config.before(:each) do
+    stub_request(:any, /api\.github.com/).to_rack(FakeGitHub)
   end
 end
 
