@@ -53,7 +53,11 @@ module Vault2git
     def quote_value(value)
       return "" unless value
 
-      value.include?(" ") ? "\"#{value}\"" : value
+      if value.include?(" ")
+        "\"#{value}\""
+      else
+        value
+      end
     end
 
     def escape_quotes(str)
