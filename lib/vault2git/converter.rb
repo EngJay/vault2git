@@ -64,7 +64,7 @@ module Vault2git
       str.gsub "'", "''"
     end
 
-    def vault_command(command, options = [], args = [], append_source_folder = true)
+    def vault_command(command, options = [], args = [], append_source_folder: true)
       parts = []
       parts << quote_param(:vault_client)
       parts << command
